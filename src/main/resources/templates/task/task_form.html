@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments::page_head(${pageTitle})}"></head>
+
+<body>
+
+<div th:replace="~{navbar::content}"></div>
+
+<div class="container-fluid text-center mt-2">
+    <h2 th:text="${pageHead}"></h2>
+</div>
+
+<div class="container-fluid text-center mt-4">
+
+    <form th:action="@{'/folders/' + ${folder_id} + '/tasks/save'}" method="post" th:object="${task}">
+
+        <input type="hidden" th:field="*{id}"/>
+        <input type="hidden" th:field="*{expired}"/>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Назва задачі:</label>
+            <div class="col-sm-10">
+                <input type="text" th:field="*{taskName}" class="form-control" placeholder="Приклад: Моя домашка..."
+                       minlength="2" required/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Дедлайн:</label>
+            <div class="col-sm-10">
+                <input type="date" th:field="*{deadline}" class="form-control" required/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Статус:</label>
+            <div class="col-sm-10">
+                <select th:field="*{status}" class="form-control" required>
+                    <th:block th:each="status: ${statuses}">
+                        <option th:if="${task.id!=null}" th:selected="${task.status.equals(status)}" th:value="${status}" th:text="${status.value}"></option>
+                        <option th:if="${task.id==null}" th:value="${status}" th:text="${status.value}"></option>
+                    </th:block>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Пріорітет:</label>
+            <div class="col-sm-10">
+                <select th:field="*{priority}" class="form-control" required>
+                    <th:block th:each="priority: ${priorities}">
+                        <option th:if="${task.id!=null}"  th:selected="${task.priority.equals(priority)}" th:value="${priority}" th:text="${priority.value}"></option>
+                        <option th:if="${task.id==null}"  th:value="${priority}" th:text="${priority.value}"></option>
+                    </th:block>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Опис:</label>
+            <div class="col-sm-10">
+                <input type="text" th:field="*{taskDescription}" class="form-control" placeholder="Зробити вправу №7 у зош..." minlength="2" required/>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <input type="submit" value="Зберегти" class="btn btn-primary m-3"/>
+            <a class="btn btn-secondary" id="buttonCancel" th:href="@{'/folders/' + ${folderId} + '/tasks'}">Назад</a>
+        </div>
+
+    </form>
+
+</div>
+
+<div th:replace="~{modal_fragments::warning_modal}"></div>
+
+<script th:inline="javascript">
+    function checkUnique(form) {
+        const taskName = $("#taskName").val();
+        $.ajax({
+            url: '/MyFlow/tasks/check_for_uniqueness/' + taskName,
+            type: 'GET',
+            success: function (response) {
+                if (response === "OK") {
+                    form.submit();
+                } else if (response === "DuplicateName") {
+                    showWarningModal("Вже існує задача з іменем " + taskName);
+                } else {
+                    showErrorModal("Невідома відповідь від сервера. Помилка 500");
+                }
+            },
+            error: function (xhr, status, error) {
+                // Обработка ошибки удаления папки
+                console.log(error); // Выводим ошибку в консоль для отладки
+            }
+        });
+
+        return false;
+    }
+
+    function showErrorModal(message) {
+        showModalDialog("Помилка!", message)
+    }
+
+    function showWarningModal(message) {
+        showModalDialog("Увага!", message)
+    }
+
+    function showModalDialog(title, message) {
+        $("#modalTitle").text(title);
+        $("#modalBody").text(message);
+        $("#modalDialog").modal();
+    }
+
+
+    var deadlineInput = document.getElementById('deadline');
+    /*<![CDATA[*/
+    var dateValue = /*[[${task.deadline}]]*/ null;
+    /*]]>*/
+    var formattedDate = dateValue.split('.').reverse().join('-');
+    deadlineInput.value = formattedDate;
+
+
+</script>
+
+</body>
+
+</html>

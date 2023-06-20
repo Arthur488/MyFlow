@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      lang="en">
+
+<div th:fragment="content" th:remove="${tag}">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" th:href="@{/}"><b>Додому</b></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/charts}">Статистика <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <b><a class="nav-link" href="#" th:text="${AUTHENTICATED_USER_FULL_NAME}"></a></b>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+                        <input type="submit"/>
+                    </form>
+                </li>
+                <li>
+                    <a class="nav-link" href="javascript: document.logoutForm.submit()">Logout</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <div th:fragment="breadcrumb" th:remove="tag">
+        <div class="row">
+            <div class="col">
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <span>[[${folderName}]]</span>
+                        </li>
+                    </ol>
+                    <th:block th:if="${message!=null}">
+                        <div class="row">
+                            <div class="col-9"></div>
+                            <div class="col-3">
+                                <div th:replace="~{fragments::toast-message}"></div>
+                            </div>
+                        </div>
+
+                    </th:block>
+
+                </nav>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</html>

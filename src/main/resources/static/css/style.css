@@ -1,0 +1,52 @@
+.red{
+    color: rgba(255, 0, 0, 0.4);
+    transition: transform 0.3s; /* Плавная анимация изменения размера */
+}
+.red:hover {
+    color: red; /* Насыщенный цвет при наведении */
+    transform: scale(1.4); /* Увеличение при наведении */
+}
+
+.blue{
+    color: rgba(0, 0, 255, 0.4);
+    transition: transform 0.3s; /* Плавная анимация изменения размера */
+}
+.blue:hover {
+    color: blue; /* Насыщенный цвет при наведении */
+    transform: scale(1.4); /* Увеличение при наведении */
+}
+
+.green{
+    color: rgba(0, 128, 0, 0.4);
+    transition: transform 0.3s; /* Плавная анимация изменения размера */
+}
+.green:hover {
+    color: green; /* Насыщенный цвет при наведении */
+    transform: scale(1.4); /* Увеличение при наведении */
+}
+
+.card-effect {
+    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s; /* Плавная анимация изменения размера, тени и цвета фона */
+}
+
+.card-effect:hover {
+    transform: scale(1.05); /* Увеличение при наведении */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Тень при наведении */
+    background-color: #f8f9fa; /* Изменение цвета фона при наведении */
+}
+
+.yellow2{
+    color: #ffa600;
+}
+
+
+
+
+
+
+
+
+
+
+
+

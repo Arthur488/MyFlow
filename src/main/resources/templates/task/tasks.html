@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments::page_head(${pageTitle})}"></head>
+
+<body>
+
+<div th:replace="~{navbar::content}"></div>
+
+<th:block th:unless="${allTasks.isEmpty()}">
+
+    <div class="container-fluid text-center mt-2">
+        <div class="row">
+            <div class="col-3 d-flex align-items-center">
+                <a th:href="@{tasks/new}" class="btn btn-primary">
+                    <i class="fas fa-regular fa-folder-plus fa-1-5x mr-2"></i>
+                    Створити новe завдання
+                </a>
+            </div>
+
+            <div class="col-6">
+                <h2 class="font-weight-bold">Завдання у папці: [[${folderName}]]</h2>
+            </div>
+
+            <div class="col-3">
+                <form th:action="@{/tasks/page/1}">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect03">
+                                <i class="fas fa-sort"></i>
+                            </label>
+                        </div>
+                        <select class="custom-select" id="inputGroupSelect03" name="sort" onchange="this.form.submit()">
+                            <option selected disabled hidden>Сортування...</option>
+                            <option value="folderName,desc">За назвою на зростання</option>
+                            <option value="folderName,asc">За назвою на спадання</option>
+                            <option value="priority,desc">За пріорітетом на зростання</option>
+                            <option value="priority,asc">За пріорітетом на спадання</option>
+                            <option value="taskList,desc">За кількістю задач на зростання</option>
+                            <option value="taskList,asc">За кількістю задач на спадання</option>
+                        </select>
+                        <div class="input-group-append">
+                            <label class="input-group-text" for="inputGroupSelect03">
+                                <i class="fas fa-chevron-down"></i>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</th:block>
+<th:block th:if="${allTasks.isEmpty()}">
+    <div class="container-fluid text-center mt-2">
+        <h2>Нема задач у папці [[${folderName}]]</h2>
+    </div>
+</th:block>
+
+<div th:unless="${allTasks.isEmpty()}" class="row m-3 mt-5">
+
+    <th:block th:each="task : ${allTasks}">
+        <div class="col-3 mb-4">
+            <div class="card h-100 card-effect" th:style="${'border-color: ' + task.priority.getPriorityColor(task.priority)}">
+
+                <div class="card-body">
+
+                    <div class="row mb-2">
+                        <div class="col-4 d-flex justify-content-center">
+                            <a th:href="@{'tasks/delete/' + ${task.id}}" class="link-delete" th:modelName="${task.taskName}">
+                                <i class="fas fa-regular fa-trash fa-1-5x red"></i>
+                            </a>
+                        </div>
+                        <div class="col-4 d-flex justify-content-center">
+                            <a th:href="@{'tasks/edit/' + ${task.id}}">
+                                <i class="fas fa-solid fa-pen-to-square fa-1-5x blue"></i>
+                            </a>
+                        </div>
+                        <div class="col-4 d-flex justify-content-center">
+                            <a href="#">
+                                <i class="fas fa-solid fa-right-to-bracket fa-1-5x green"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <h5 class="card-title text-center" th:text="${task.taskName}"></h5>
+                    <hr class="bold-line">
+                    <p class="card-text" th:text="'Створено: ' + ${task.createdDate}"></p>
+                    <hr class="bold-line">
+                    <p class="card-text" th:text="'Дедлайн до: ' + ${task.deadline}"></p>
+                    <hr class="bold-line">
+                    <p class="card-text" th:text="${task.status.value}"></p>
+                    <hr class="bold-line">
+                    <th:block th:switch="${task.priority}">
+                        <span th:case="${task.priority.LOW}" style="color: green"
+                              th:text="'Пріорітет: ' + ${task.priority.value}"
+                              th:classappend="priority-style"></span>
+                        <span th:case="${task.priority.MEDIUM_LOW}" style="color: blue"
+                              th:text="'Пріорітет: ' + ${task.priority.value}" th:classappend="priority-style"></span>
+                        <span th:case="${task.priority.MEDIUM}" style="color: orange"
+                              th:text="'Пріорітет: ' + ${task.priority.value}"
+                              th:classappend="priority-style"></span>
+                        <span th:case="${task.priority.MEDIUM_HIGH}" style="color: darkred"
+                              th:text="'Пріорітет: ' + ${task.priority.value}" th:classappend="priority-style"></span>
+                        <span th:case="${task.priority.HIGH}" style="color: red"
+                              th:text="'Пріорітет: ' + ${task.priority.value}"
+                              th:classappend="priority-style"></span>
+                    </th:block>
+
+                    <hr class="bold-line">
+                    <span th:text="${task.taskDescription}"></span>
+                    <p></p>
+
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>
+
+<div th:replace="~{modal_fragments::confirm_modal}"></div>
+
+
+<script th:inline="javascript">
+    $(document).ready(function () {
+        /*<![CDATA[*/
+        var successMessage = /*[[${message}]]*/ null;
+        /*]]>*/
+        console.log(successMessage)
+        if (successMessage != null) {
+            showToastMessage(successMessage);
+        }
+    })
+
+    // Проверяем наличие successMessage в модели и показываем всплывающее сообщение
+    function showToastMessage(message) {
+        $("#toastMessage").text(message);
+        $(".toast").toast('show');
+    }
+
+    $(document).ready(function () {
+        $(".link-delete").on("click", function (e) {
+            e.preventDefault();
+            showDeleteConfirmModal($(this), 'user');
+        });
+    });
+
+    function showDeleteConfirmModal(link) {
+        const modelName = link.attr("modelName");
+        $("#yesButton").attr("href", link.attr("href"));
+        $("#confirmText").text("Ви впевні щодо видалення папки " + modelName + "?");
+        $("#confirmModal").modal();
+    }
+
+</script>
+
+</body>
+
+</html>
