@@ -5,6 +5,11 @@ pipeline {
         JAVA_TOOL_OPTIONS = "-Dfile.encoding=UTF-8"
     }
 
+    // Specify the JDK to be used for this pipeline
+    tools {
+        jdk 'JDK 17'
+    }
+
     stages {
         stage('Clone the project') {
             steps {
