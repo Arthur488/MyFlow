@@ -26,6 +26,7 @@ pipeline {
         stage('Deployment') {
             steps {
                 // Здесь можно добавить шаги для развертывания приложения (если есть)
+                bat 'java -version'
                 bat 'java -jar target/WorkFlow-0.0.1-SNAPSHOT.jar'
             }
         }
