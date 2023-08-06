@@ -19,14 +19,14 @@ pipeline {
         stage('Run Tests') {
             steps {
                 // Здесь можно добавить шаги для запуска тестов (если есть)
-                // Например: bat 'mvn test'
+                bat 'mvn test'
             }
         }
 
         stage('Deployment') {
             steps {
                 // Здесь можно добавить шаги для развертывания приложения (если есть)
-                // Например: bat 'java -jar target/WorkFlow-0.0.1-SNAPSHOT.jar'
+                bat 'java -jar target/WorkFlow-0.0.1-SNAPSHOT.jar'
             }
         }
     }
