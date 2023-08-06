@@ -4,13 +4,13 @@ pipeline {
     stages {
         stage('Clone the project') {
             steps {
-                git branch: 'main', url: 'https://github.com/Arthur488/WorkFlow.git'
+                git branch: 'main', url: 'https://github.com/Arthur488/MyFlow'
             }
         }
 
         stage('Build') {
             steps {
-                withMaven(maven: 'apache-maven-3.6.1') {
+                withMaven(maven: 'apache-maven-3.8.1') {
                     bat 'mvn clean package'
                 }
             }
