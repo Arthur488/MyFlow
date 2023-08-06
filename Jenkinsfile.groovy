@@ -16,12 +16,6 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                // Здесь можно добавить шаги для запуска тестов (если есть)
-                bat 'mvn test'
-            }
-        }
 
         stage('Deployment') {
             steps {

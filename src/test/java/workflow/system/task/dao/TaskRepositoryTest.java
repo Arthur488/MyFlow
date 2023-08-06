@@ -12,6 +12,7 @@ import workflow.models.Status;
 import workflow.models.Task;
 
 import java.time.LocalDate;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,10 +23,11 @@ class TaskRepositoryTest {
     TaskRepository taskRepository;
 
     @Test
-    @Rollback(value = false)
+    @Rollback
     void testCreateTask() {
         Task task = new Task();
-        task.setTaskName("Create photo upload");
+        double random = Math.random();
+        task.setTaskName("Create photo upload" + random);
         task.setTaskDescription("Create photo upload in order have ability to upload up to 10 photos at 1 time");
         task.setCreatedDate(LocalDate.now());
         task.setPriority(Priority.LOW);

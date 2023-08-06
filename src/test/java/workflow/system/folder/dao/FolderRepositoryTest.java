@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Rollback;
 import workflow.models.Customer;
 import workflow.models.Folder;
 import workflow.security.Utility;
@@ -21,9 +22,11 @@ class FolderRepositoryTest {
     FolderRepository folderRepository;
 
     @Test
+    @Rollback
     void testCreate() {
         Folder folder = new Folder();
-        folder.setFolderName("My work");
+        double random = Math.random();
+        folder.setFolderName("My work" + random);
         folderRepository.save(folder);
     }
 
