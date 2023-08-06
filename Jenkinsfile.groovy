@@ -31,7 +31,8 @@ pipeline {
             steps {
                 // Здесь можно добавить шаги для развертывания приложения (если есть)
 //                bat 'java -version'
-                bat 'chcp 65001' // Set the code page to UTF-8
+                bat 'cd ..'
+
                 bat 'java -jar C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\MySpringBootApp\\target\\WorkFlow-0.0.1-SNAPSHOT.jar\n'
             }
         }
