@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone the project') {
             steps {
-                git branch: 'main', url: 'https://github.com/Arthur488/MyFlow'
+                git branch: 'master', url: 'https://github.com/Arthur488/MyFlow'
             }
         }
 
